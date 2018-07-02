@@ -13,7 +13,7 @@ apt-get install -y kubelet kubeadm kubectl
 sudo swapoff -a
 
 # Initialize master node
-kubeadm init
+kubeadm init --pod-network-cidr=192.168.0.0/16
 
 # Allow non-root user to use kubtctl
 mkdir -p $HOME/.kube
