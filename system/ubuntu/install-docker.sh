@@ -2,7 +2,7 @@
 
 sudo apt-get remove docker docker-engine docker.io
 sudo apt-get update
-sudo apt-get install \
+sudo apt-get -y install \
     apt-transport-https \
     ca-certificates \
     curl \
