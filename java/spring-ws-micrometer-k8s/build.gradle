@@ -34,7 +34,9 @@ targetCompatibility = 1.10
 
 dependencies {
     compile("org.aspectj:aspectjrt")
+    compile("org.pcollections:pcollections:2.1.2")
     compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework.boot:spring-boot-starter-actuator")
     compile("io.micrometer:micrometer-registry-statsd:latest.release")
     testCompile("org.springframework.boot:spring-boot-starter-test")
 }

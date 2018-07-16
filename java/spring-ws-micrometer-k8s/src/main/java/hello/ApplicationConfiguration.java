@@ -3,6 +3,9 @@ package hello;
 import io.micrometer.core.aop.TimedAspect;
 import io.micrometer.core.instrument.Clock;
 import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Metrics;
+import io.micrometer.core.instrument.composite.CompositeMeterRegistry;
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import io.micrometer.statsd.StatsdConfig;
 import io.micrometer.statsd.StatsdFlavor;
 import io.micrometer.statsd.StatsdMeterRegistry;
@@ -27,7 +30,11 @@ public class ApplicationConfiguration {
             }
         };
 
-        return new StatsdMeterRegistry(config, Clock.SYSTEM);
+        CompositeMeterRegistry meterRegistry = new CompositeMeterRegistry();
+        meterRegistry.add(new StatsdMeterRegistry(config, Clock.SYSTEM));
+        meterRegistry.add(new SimpleMeterRegistry());
+
+        return meterRegistry;
     }
 
     @Bean
