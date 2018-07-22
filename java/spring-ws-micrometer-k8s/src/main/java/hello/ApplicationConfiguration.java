@@ -3,12 +3,12 @@ package hello;
 import io.micrometer.core.aop.TimedAspect;
 import io.micrometer.core.instrument.Clock;
 import io.micrometer.core.instrument.MeterRegistry;
-import io.micrometer.core.instrument.Metrics;
 import io.micrometer.core.instrument.composite.CompositeMeterRegistry;
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import io.micrometer.statsd.StatsdConfig;
 import io.micrometer.statsd.StatsdFlavor;
 import io.micrometer.statsd.StatsdMeterRegistry;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -38,6 +38,7 @@ public class ApplicationConfiguration {
     }
 
     @Bean
+    @Autowired
     public TimedAspect timedAspect(MeterRegistry registry) {
         return new TimedAspect(registry);
     }

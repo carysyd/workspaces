@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: spring-ws-service
+spec:
+  ports:
+  - port: 8080
+    targetPort: 8080
+    name: rest-server
+  selector:
+    app: spring-ws-micrometer-k8s-app
+  type: NodePort
