@@ -1,8 +1,5 @@
 package hello;
 
-import io.micrometer.core.annotation.Timed;
-import io.micrometer.core.instrument.Counter;
-import io.micrometer.core.instrument.Metrics;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,6 +8,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Random;
+
+import io.micrometer.core.annotation.Timed;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.Metrics;
 
 @SpringBootApplication
 @RestController

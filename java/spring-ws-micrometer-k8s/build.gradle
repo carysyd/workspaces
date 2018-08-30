@@ -6,10 +6,22 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.0.3.RELEASE")
+        classpath('org.springframework.boot:spring-boot-gradle-plugin:2.0.3.RELEASE')
         classpath('gradle.plugin.com.palantir.gradle.docker:gradle-docker:0.19.2')
+        classpath('com.netflix.nebula:gradle-ospackage-plugin:4.9.3')
     }
 }
+
+plugins {
+    id 'java'
+    id 'idea'
+    id 'org.springframework.boot' version '1.5.9.RELEASE'
+    id "nebula.ospackage-application-spring-boot" version "4.9.3"
+    id 'com.palantir.git-version' version '0.10.0'
+}
+
+def now = "date +%Y%m%d%H%M".execute().text.trim()
+def gitHash = "git rev-parse --short HEAD".execute().text.trim()
 
 group = 'com.caryli'
 
@@ -17,27 +29,33 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
+apply plugin: 'nebula.deb'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'com.palantir.docker'
 
+jar {
+    mainClassName = 'hello.Application'
+}
+
 bootJar {
     baseName = 'spring-ws-micrometer-k8s'
-    version =  '0.1.0'
+    version = '0.1.0'
 }
 
 repositories {
     mavenCentral()
 }
 
-sourceCompatibility = 1.10
-targetCompatibility = 1.10
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 dependencies {
     compile("org.aspectj:aspectjrt")
     compile("org.pcollections:pcollections:2.1.2")
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-actuator")
-    compile("io.micrometer:micrometer-registry-statsd:latest.release")
+    compile("io.micrometer:micrometer-registry-statsd:1.0.6")
+
     testCompile("org.springframework.boot:spring-boot-starter-test")
 }
 
@@ -46,4 +64,27 @@ docker {
     name "${project.group}/${bootJar.baseName}"
     files bootJar.archivePath
     buildArgs(['JAR_FILE': "${bootJar.archiveName}"])
+}
+
+task packDeb(type: Deb) {
+    if (project.hasProperty("debname")) {
+        packageName = "${debname}"
+    } else {
+        packageName = project.name
+    }
+
+    version = "${now}+${gitHash}"
+    priority = "optional"
+    arch = "amd64"
+    description = "Microservice Test"
+    maintainer = "Cary Li"
+
+    requires('openjdk-8-jdk', '8u121-b13', GREATER | EQUAL)
+
+    print "${jar}"
+
+    from(jar.outputs.files) {
+        fileMode 444
+        into "opt/spring-ws-micrometer-k8s/target"
+    }
 }

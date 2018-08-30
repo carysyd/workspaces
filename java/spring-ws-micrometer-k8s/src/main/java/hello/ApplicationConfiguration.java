@@ -1,16 +1,15 @@
 package hello;
 
-import io.micrometer.core.aop.TimedAspect;
-import io.micrometer.core.instrument.Clock;
-import io.micrometer.core.instrument.MeterRegistry;
-import io.micrometer.core.instrument.composite.CompositeMeterRegistry;
-import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
-import io.micrometer.statsd.StatsdConfig;
-import io.micrometer.statsd.StatsdFlavor;
-import io.micrometer.statsd.StatsdMeterRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import io.micrometer.core.aop.TimedAspect;
+import io.micrometer.core.instrument.Clock;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.statsd.StatsdConfig;
+import io.micrometer.statsd.StatsdFlavor;
+import io.micrometer.statsd.StatsdMeterRegistry;
 
 @Configuration
 public class ApplicationConfiguration {
@@ -30,11 +29,8 @@ public class ApplicationConfiguration {
             }
         };
 
-        CompositeMeterRegistry meterRegistry = new CompositeMeterRegistry();
-        meterRegistry.add(new StatsdMeterRegistry(config, Clock.SYSTEM));
-        meterRegistry.add(new SimpleMeterRegistry());
-
-        return meterRegistry;
+        MeterRegistry registry = new StatsdMeterRegistry(config, Clock.SYSTEM);
+        return registry;
     }
 
     @Bean
