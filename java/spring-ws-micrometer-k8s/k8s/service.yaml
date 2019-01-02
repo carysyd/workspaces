@@ -9,4 +9,3 @@ spec:
     name: rest-server
   selector:
     app: spring-ws-micrometer-k8s-app
-  type: NodePort
