@@ -9,8 +9,9 @@ EOF
 apt-get update
 apt-get install -y kubelet kubeadm kubectl
 
-# kubeadm enforces swap off before initializing K8s
+# kubeadm enforces swap off before initializing K8s, also permanently disable swap partition
 sudo swapoff -a
+sed -i 's/^.*swap.img/#&/' /etc/fstab
 
 # Initialize master node
 kubeadm init --pod-network-cidr=192.168.0.0/16
@@ -20,9 +21,10 @@ mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
-# Install Pod Network add-on
+# Install Pod Network add-on, at the end of this line, it would print the join node commands
 kubectl apply -f https://docs.projectcalico.org/v3.9/manifests/calico.yaml
 
-# Master isolation so pods can be run on master node
-kubectl taint nodes --all node-role.kubernetes.io/master-
-
+# An networking step I found needed on Kubernetes Worker Nodes
+# Make a backup of the resolve.conf file, then use the systemd one
+mv /etc/resolv.conf /etc/resolv.conf.orig
+ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf

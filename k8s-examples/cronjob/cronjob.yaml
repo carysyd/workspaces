@@ -1,0 +1,40 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: home-ddns-update
+spec:
+  schedule: "*/30 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: home-ddns-update
+            image: carysyd/route53ddns
+            imagePullPolicy: Always
+            command:
+              - "python3"
+              - "/root/update_route53.py"
+            env:
+              - name: AWSAccessKeyId
+                valueFrom:
+                  configMapKeyRef:
+                    name: vpn-caryli-route53ddns
+                    key: aws_key_id
+              - name: AWSSecretKey
+                valueFrom:
+                  configMapKeyRef:
+                    name: vpn-caryli-route53ddns
+                    key: aws_secret_key
+              - name: HostedZoneId
+                valueFrom:
+                  configMapKeyRef:
+                    name: vpn-caryli-route53ddns
+                    key: host_zone_id
+              - name: Record
+                valueFrom:
+                  configMapKeyRef:
+                    name: vpn-caryli-route53ddns
+                    key: record
+
+          restartPolicy: OnFailure
