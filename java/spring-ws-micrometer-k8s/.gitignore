@@ -4,3 +4,8 @@ build/
 out/
 
 *.iml
+
+# Visual Studio Code project files
+.project
+.settings/
+.vscode/
