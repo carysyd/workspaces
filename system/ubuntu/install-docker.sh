@@ -13,11 +13,9 @@ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 
 sudo apt-key fingerprint 0EBFCD88
 
-# docker.com eoan repo doesn't exist yet, so cannot use lsb_release here,
-# hard code it to disco
 sudo add-apt-repository \
    "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-   disco \
+   $(lsb_release -cs) \
    stable"
 
 sudo apt-get update
