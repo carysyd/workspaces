@@ -14,7 +14,7 @@ sudo swapoff -a
 sed -i 's/^.*swap.img/#&/' /etc/fstab
 
 # Initialize master node
-kubeadm init --pod-network-cidr=192.168.0.0/16
+kubeadm init --pod-network-cidr=172.16.0.0/12
 
 # Allow non-root user to use kubtctl
 mkdir -p $HOME/.kube
