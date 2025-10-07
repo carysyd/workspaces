@@ -1,0 +1,7 @@
+apiVersion: kueue.x-k8s.io/v1beta1
+kind: ResourceFlavor
+metadata:
+  name: "resource-flavor-amd64-only"
+spec:
+  nodeLabels:
+    kubernetes.io/arch: amd64
