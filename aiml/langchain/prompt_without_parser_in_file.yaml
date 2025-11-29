@@ -1,0 +1,3 @@
+_type: prompt
+input_variables: ["text"]
+template: "Extract the name and age from the following text: {text}\n{format_instructions}"

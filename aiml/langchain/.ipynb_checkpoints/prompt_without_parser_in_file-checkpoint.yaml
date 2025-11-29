@@ -1,0 +1,7 @@
+_type: prompt
+input_variables: ["text"]
+template: "Extract the name and age from the following text: {text}\n{format_instructions}"
+output_parser:
+  #_type: pydantic_parser
+  _type: default
+  pydantic_object: Person  # Assuming Person is a Pydantic model defined elsewhere
